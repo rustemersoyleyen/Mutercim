@@ -175,7 +175,13 @@ uploadArea.addEventListener('drop', function(e) {
 });
 
 // Alana tıklanınca dosya seçme penceresini açıyoruz
-uploadArea.addEventListener('click', function() {
+// NOT: Label'lar zaten input'u tetikliyor, bu yüzden sadece boş alana tıklamayı kontrol ediyoruz
+uploadArea.addEventListener('click', function(e) {
+    // Eğer label veya buton tıklandıysa, onlar zaten input'u tetikleyecek
+    if (e.target.tagName === 'LABEL' || e.target.closest('label') || e.target.closest('.upload-btn')) {
+        return; // Label kendi işini yapacak
+    }
+    // Sadece boş alana tıklandıysa dosya seçiciyi aç
     fileInput.click();
 });
 

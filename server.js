@@ -66,13 +66,21 @@ const upload = multer({
 // =====================================================
 // API anahtarını kontrol ediyoruz
 let genAI = null;
+const apiKey = process.env.GEMINI_API_KEY;
 
-if (process.env.GEMINI_API_KEY) {
-    // Gemini AI istemcisini oluşturuyoruz
-    genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+console.log('🔑 API Key durumu:', apiKey ? 'Ayarlandı (' + apiKey.substring(0,10) + '...)' : 'AYARLANMADI');
+
+if (apiKey && apiKey.length > 10) {
+    try {
+        // Gemini AI istemcisini oluşturuyoruz
+        genAI = new GoogleGenerativeAI(apiKey);
+        console.log('✅ Gemini AI istemcisi oluşturuldu');
+    } catch (err) {
+        console.error('❌ Gemini AI istemcisi oluşturulamadı:', err.message);
+    }
 } else {
-    console.error('⚠️  UYARI: GEMINI_API_KEY bulunamadı!');
-    console.error('📝 Lütfen ortam değişkenlerine API anahtarınızı ekleyin.');
+    console.error('⚠️  UYARI: GEMINI_API_KEY bulunamadı veya geçersiz!');
+    console.error('📝 Vercel Dashboard > Settings > Environment Variables bölümünden ekleyin.');
 }
 
 // =====================================================
