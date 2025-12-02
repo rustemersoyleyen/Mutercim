@@ -566,6 +566,15 @@ body {
     border-left: 4px solid var(--color-accent);
 }
 
+/* İngilizce çeviri kartı özel stilleri */
+.english-card {
+    border-left: 4px solid var(--color-success);
+}
+
+.english-text {
+    font-style: italic;
+}
+
 /* Hata Durumu */
 .error-state {
     display: none;

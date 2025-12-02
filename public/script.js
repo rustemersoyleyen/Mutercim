@@ -29,6 +29,7 @@ const retryBtn = document.getElementById('retryBtn');
 // Sonuç metinleri
 const transcriptionText = document.getElementById('transcriptionText');
 const translationText = document.getElementById('translationText');
+const englishText = document.getElementById('englishText');
 
 // Toast container
 const toastContainer = document.getElementById('toastContainer');
@@ -222,9 +223,11 @@ function showResults(data) {
     if (data.error) {
         transcriptionText.textContent = data.error;
         translationText.textContent = data.error;
+        englishText.textContent = data.error;
     } else {
         transcriptionText.textContent = data.transcription || 'Transkripsiyon bulunamadı';
         translationText.textContent = data.translation || 'Çeviri bulunamadı';
+        englishText.textContent = data.english || 'English translation not available';
     }
     
     resultsCards.classList.add('active');

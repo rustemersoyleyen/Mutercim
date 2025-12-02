@@ -106,8 +106,8 @@ app.post('/upload', upload.single('image'), async (req, res) => {
         // GEMİNİ AI İLE İLETİŞİM
         // =====================================================
         
-        // Gemini-1.5-flash modelini kullanıyoruz (hızlı ve verimli)
-        const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+        // Gemini-2.5-pro modelini kullanıyoruz (daha güçlü ve doğru)
+        const model = genAI.getGenerativeModel({ model: 'gemini-2.5-pro' });
 
         // Resmi base64 formatına çeviriyoruz
         // Gemini API, resimleri bu formatta bekliyor
@@ -129,20 +129,23 @@ Bu resimdeki Osmanlıca (Arap harfli Türkçe) metni dikkatli bir şekilde anali
 ÖNEMLİ KURALLAR:
 1. Metni satır satır oku, hiçbir kelimeyi atlama
 2. Transkripsiyon yaparken Osmanlıca harflerin Latin karşılıklarını doğru kullan
-3. Çeviride günümüz Türkçesinin dil kurallarına uy
-4. Eğer resimde metin yoksa veya okunamıyorsa, bunu belirt
+3. Türkçe çeviride günümüz Türkçesinin dil kurallarına uy
+4. İngilizce çeviriyi de ekle
+5. Eğer resimde metin yoksa veya okunamıyorsa, bunu belirt
 
 Cevabını SADECE aşağıdaki JSON formatında ver, başka hiçbir açıklama ekleme:
 
 {
     "transcription": "Metnin Latin harfleriyle okunuşu buraya gelecek",
-    "translation": "Metnin günümüz modern Türkçesine çevirisi buraya gelecek"
+    "translation": "Metnin günümüz modern Türkçesine çevirisi buraya gelecek",
+    "english": "English translation of the text goes here"
 }
 
 Eğer metin okunamıyorsa veya Osmanlıca değilse:
 {
     "transcription": "",
     "translation": "",
+    "english": "",
     "error": "Açıklama mesajı"
 }`;
 
@@ -201,6 +204,7 @@ Eğer metin okunamıyorsa veya Osmanlıca değilse:
             data: {
                 transcription: parsedResponse.transcription || '',
                 translation: parsedResponse.translation || '',
+                english: parsedResponse.english || '',
                 error: parsedResponse.error || null
             }
         });
