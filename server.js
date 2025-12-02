@@ -49,15 +49,15 @@ const upload = multer({
 // GEMINI AI AYARLARI
 // =====================================================
 // API anahtarını kontrol ediyoruz
-if (!process.env.GEMINI_API_KEY) {
-    console.error('⚠️  HATA: GEMINI_API_KEY bulunamadı!');
-    console.error('📝 Lütfen .env dosyasına API anahtarınızı ekleyin.');
-    console.error('   Örnek: GEMINI_API_KEY=your_api_key_here');
-    process.exit(1);  // Uygulama durduruluyor
-}
+let genAI = null;
 
-// Gemini AI istemcisini oluşturuyoruz
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+if (process.env.GEMINI_API_KEY) {
+    // Gemini AI istemcisini oluşturuyoruz
+    genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+} else {
+    console.error('⚠️  UYARI: GEMINI_API_KEY bulunamadı!');
+    console.error('📝 Lütfen ortam değişkenlerine API anahtarınızı ekleyin.');
+}
 
 // =====================================================
 // MIDDLEWARE (Ara Yazılımlar)
@@ -83,6 +83,14 @@ app.get('/', (req, res) => {
 // Bu endpoint, kullanıcıdan resim alır ve Gemini'ye gönderir
 app.post('/upload', upload.single('image'), async (req, res) => {
     try {
+        // API anahtarı var mı kontrol ediyoruz
+        if (!genAI) {
+            return res.status(500).json({
+                success: false,
+                error: 'API anahtarı yapılandırılmamış. Lütfen yöneticiyle iletişime geçin.'
+            });
+        }
+
         // Dosya yüklenmiş mi kontrol ediyoruz
         if (!req.file) {
             return res.status(400).json({
@@ -246,17 +254,23 @@ app.use((error, req, res, next) => {
 // =====================================================
 // SUNUCUYU BAŞLAT
 // =====================================================
-app.listen(PORT, () => {
-    console.log('');
-    console.log('╔═══════════════════════════════════════════════════╗');
-    console.log('║                                                   ║');
-    console.log('║   🏛️  MÜTERCİM - Osmanlıca Çeviri Uygulaması      ║');
-    console.log('║       TÜBİTAK Öğrenci Projesi                     ║');
-    console.log('║                                                   ║');
-    console.log('╠═══════════════════════════════════════════════════╣');
-    console.log(`║   🌐 Sunucu çalışıyor: http://localhost:${PORT}       ║`);
-    console.log('║   📝 Çıkmak için: Ctrl + C                        ║');
-    console.log('╚═══════════════════════════════════════════════════╝');
-    console.log('');
-});
+// Vercel'de değilsek normal sunucu olarak çalıştır
+if (process.env.VERCEL !== '1') {
+    app.listen(PORT, () => {
+        console.log('');
+        console.log('╔═══════════════════════════════════════════════════╗');
+        console.log('║                                                   ║');
+        console.log('║   🏛️  MÜTERCİM - Osmanlıca Çeviri Uygulaması      ║');
+        console.log('║       TÜBİTAK Öğrenci Projesi                     ║');
+        console.log('║                                                   ║');
+        console.log('╠═══════════════════════════════════════════════════╣');
+        console.log(`║   🌐 Sunucu çalışıyor: http://localhost:${PORT}       ║`);
+        console.log('║   📝 Çıkmak için: Ctrl + C                        ║');
+        console.log('╚═══════════════════════════════════════════════════╝');
+        console.log('');
+    });
+}
+
+// Vercel için export ediyoruz
+module.exports = app;
 
