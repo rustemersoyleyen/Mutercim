@@ -47,45 +47,22 @@ let selectedFile = null;
  * @param {File} file - Seçilen dosya
  */
 function handleFileSelect(file) {
+    // DEBUG: Fonksiyon çağrıldığını göster
+    console.log('🔵 handleFileSelect çağrıldı');
+    
     // Dosya geçerli mi kontrol ediyoruz
     if (!file) {
         console.log('⚠️ Dosya seçilmedi');
+        showToast('Dosya seçilemedi', 'error');
         return;
     }
     
-    console.log('📷 Dosya bilgisi:', {
-        name: file.name,
-        type: file.type,
-        size: file.size
-    });
+    // DEBUG: Dosya bilgilerini göster
+    const fileInfo = `Dosya: ${file.name}\nTür: ${file.type}\nBoyut: ${(file.size/1024).toFixed(1)} KB`;
+    console.log('📷 Dosya bilgisi:', fileInfo);
     
-    // Dosya türü kontrolü - mobil uyumlu
-    // Bazı mobil cihazlar farklı MIME tipi gönderebilir
-    const allowedTypes = [
-        'image/jpeg', 
-        'image/jpg', 
-        'image/png', 
-        'image/webp',
-        'image/heic',  // iPhone
-        'image/heif'   // iPhone
-    ];
-    
-    // Dosya uzantısını da kontrol et (bazı cihazlar MIME type göndermez)
-    const fileName = file.name.toLowerCase();
-    const allowedExtensions = ['.jpg', '.jpeg', '.png', '.webp', '.heic', '.heif'];
-    const hasValidExtension = allowedExtensions.some(ext => fileName.endsWith(ext));
-    
-    // MIME type boşsa veya bilinmiyorsa uzantıya bak
-    const isValidType = allowedTypes.includes(file.type) || 
-                        file.type.startsWith('image/') || 
-                        hasValidExtension ||
-                        file.type === ''; // Bazı mobil cihazlar boş gönderir
-    
-    if (!isValidType) {
-        showToast('Sadece resim dosyaları yüklenebilir (JPEG, PNG, WEBP)', 'error');
-        console.log('❌ Geçersiz dosya türü:', file.type);
-        return;
-    }
+    // Tüm resim türlerini kabul et - mobil uyumluluk için
+    // Sadece boyut kontrolü yapalım
     
     // Dosya boyutu kontrolü (10 MB)
     const maxSize = 10 * 1024 * 1024;
@@ -94,32 +71,53 @@ function handleFileSelect(file) {
         return;
     }
     
+    // Dosya boyutu 0 ise hata
+    if (file.size === 0) {
+        showToast('Dosya boş görünüyor', 'error');
+        return;
+    }
+    
     // Dosyayı kaydediyoruz
     selectedFile = file;
+    showToast('Dosya alındı, yükleniyor...', 'success');
     
     // Önizleme gösteriyoruz
     const reader = new FileReader();
     
     reader.onload = function(e) {
-        console.log('✅ Dosya okundu, önizleme gösteriliyor');
-        previewImage.src = e.target.result;
-        previewArea.classList.add('active');
-        uploadArea.style.display = 'none';
-        translateBtn.disabled = false;
-        showToast('Görsel yüklendi!', 'success');
+        console.log('✅ Dosya okundu');
+        
+        try {
+            previewImage.src = e.target.result;
+            previewArea.classList.add('active');
+            uploadArea.style.display = 'none';
+            translateBtn.disabled = false;
+            showToast('Görsel yüklendi!', 'success');
+        } catch (err) {
+            console.error('❌ Önizleme hatası:', err);
+            showToast('Önizleme gösterilemedi: ' + err.message, 'error');
+        }
     };
     
     reader.onerror = function(e) {
         console.error('❌ Dosya okuma hatası:', e);
-        showToast('Dosya okunamadı, lütfen tekrar deneyin', 'error');
+        showToast('Dosya okunamadı: ' + (e.target.error?.message || 'Bilinmeyen hata'), 'error');
     };
     
-    reader.readAsDataURL(file);
+    reader.onabort = function(e) {
+        console.error('❌ Dosya okuma iptal edildi');
+        showToast('Dosya okuma iptal edildi', 'error');
+    };
+    
+    try {
+        reader.readAsDataURL(file);
+    } catch (err) {
+        console.error('❌ readAsDataURL hatası:', err);
+        showToast('Dosya işlenemedi: ' + err.message, 'error');
+    }
     
     // Sonuç alanını temizliyoruz
     resetResultsArea();
-    
-    console.log('📷 Dosya seçildi:', file.name);
 }
 
 /**
@@ -181,53 +179,43 @@ uploadArea.addEventListener('click', function() {
     fileInput.click();
 });
 
-// Dosya seçme inputu değiştiğinde
-fileInput.addEventListener('change', function(e) {
-    console.log('📁 Dosya input change eventi tetiklendi');
-    if (e.target.files && e.target.files.length > 0) {
-        handleFileSelect(e.target.files[0]);
-    }
-});
-
-// Kamera inputu değiştiğinde (mobil için)
-// Birden fazla event dinleyici ekliyoruz - mobil uyumluluk için
-function handleCameraChange(e) {
-    console.log('📷 Kamera input change eventi tetiklendi');
-    console.log('📷 Files:', e.target.files);
+// Genel dosya işleme fonksiyonu
+function processFileInput(e, source) {
+    console.log(`📁 ${source} change eventi tetiklendi`);
     
-    if (e.target.files && e.target.files.length > 0) {
-        const file = e.target.files[0];
-        console.log('📷 Dosya bulundu:', file.name, file.type, file.size);
-        handleFileSelect(file);
-    } else {
-        console.log('⚠️ Kamera inputunda dosya bulunamadı');
+    if (!e.target.files) {
+        console.log('⚠️ files objesi yok');
+        showToast(`${source}: Dosya alınamadı (files yok)`, 'error');
+        return;
     }
+    
+    if (e.target.files.length === 0) {
+        console.log('⚠️ Dosya seçilmedi veya iptal edildi');
+        // İptal durumunda toast gösterme
+        return;
+    }
+    
+    const file = e.target.files[0];
+    console.log(`📁 ${source} dosya:`, file.name, file.type, file.size);
+    showToast(`${source}: Dosya algılandı`, 'success');
+    
+    handleFileSelect(file);
 }
 
-cameraInput.addEventListener('change', handleCameraChange);
-
-// iOS Safari için ek event listener
-cameraInput.addEventListener('input', function(e) {
-    console.log('📷 Kamera input eventi tetiklendi (input)');
-    if (e.target.files && e.target.files.length > 0) {
-        handleFileSelect(e.target.files[0]);
-    }
+// Dosya seçme inputu
+fileInput.addEventListener('change', function(e) {
+    processFileInput(e, 'Dosya');
 });
 
-// Galeri inputu değiştiğinde (mobil için)
+// Kamera inputu
+cameraInput.addEventListener('change', function(e) {
+    processFileInput(e, 'Kamera');
+});
+
+// Galeri inputu
 if (galleryInput) {
     galleryInput.addEventListener('change', function(e) {
-        console.log('🖼️ Galeri input change eventi tetiklendi');
-        if (e.target.files && e.target.files.length > 0) {
-            handleFileSelect(e.target.files[0]);
-        }
-    });
-    
-    galleryInput.addEventListener('input', function(e) {
-        console.log('🖼️ Galeri input eventi tetiklendi (input)');
-        if (e.target.files && e.target.files.length > 0) {
-            handleFileSelect(e.target.files[0]);
-        }
+        processFileInput(e, 'Galeri');
     });
 }
 
