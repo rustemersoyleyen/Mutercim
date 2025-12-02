@@ -181,20 +181,56 @@ uploadArea.addEventListener('click', function() {
 
 // Dosya seçme inputu değiştiğinde
 fileInput.addEventListener('change', function(e) {
-    if (e.target.files.length > 0) {
+    console.log('📁 Dosya input change eventi tetiklendi');
+    if (e.target.files && e.target.files.length > 0) {
         handleFileSelect(e.target.files[0]);
     }
 });
 
 // Kamera inputu değiştiğinde (mobil için)
-cameraInput.addEventListener('change', function(e) {
-    if (e.target.files.length > 0) {
+// Birden fazla event dinleyici ekliyoruz - mobil uyumluluk için
+function handleCameraChange(e) {
+    console.log('📷 Kamera input change eventi tetiklendi');
+    console.log('📷 Files:', e.target.files);
+    
+    if (e.target.files && e.target.files.length > 0) {
+        const file = e.target.files[0];
+        console.log('📷 Dosya bulundu:', file.name, file.type, file.size);
+        handleFileSelect(file);
+    } else {
+        console.log('⚠️ Kamera inputunda dosya bulunamadı');
+    }
+}
+
+cameraInput.addEventListener('change', handleCameraChange);
+
+// iOS Safari için ek event listener
+cameraInput.addEventListener('input', function(e) {
+    console.log('📷 Kamera input eventi tetiklendi (input)');
+    if (e.target.files && e.target.files.length > 0) {
         handleFileSelect(e.target.files[0]);
     }
 });
 
 // Kaldır butonuna tıklama
 removeBtn.addEventListener('click', removeFile);
+
+// =====================================================
+// MOBİL KAMERA YARDIMCI FONKSİYONLARI
+// =====================================================
+
+// Kamera butonuna tıklandığında input'u resetle
+document.querySelector('.camera-btn').addEventListener('click', function(e) {
+    // Önce input'u temizle - bu iOS'ta önemli
+    cameraInput.value = '';
+    console.log('📷 Kamera butonu tıklandı, input temizlendi');
+});
+
+// Dosya seç butonuna tıklandığında input'u resetle  
+document.querySelector('.upload-btn:not(.camera-btn)').addEventListener('click', function(e) {
+    fileInput.value = '';
+    console.log('📁 Dosya seç butonu tıklandı, input temizlendi');
+});
 
 // =====================================================
 // API İLETİŞİMİ
