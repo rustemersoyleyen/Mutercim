@@ -69,15 +69,34 @@
                         <div class="upload-icon">📄</div>
                         <p class="upload-text">Osmanlıca metin görselini sürükleyip bırakın</p>
                         <p class="upload-subtext">veya</p>
-                        <label for="fileInput" class="upload-btn">
-                            Dosya Seç
-                        </label>
+                        
+                        <!-- Buton grubu - Dosya seç ve Kamera -->
+                        <div class="upload-buttons">
+                            <label for="fileInput" class="upload-btn">
+                                📁 Dosya Seç
+                            </label>
+                            <label for="cameraInput" class="upload-btn camera-btn">
+                                📷 Kamera
+                            </label>
+                        </div>
+                        
+                        <!-- Dosya seçme inputu -->
                         <input 
                             type="file" 
                             id="fileInput" 
                             accept="image/jpeg,image/jpg,image/png,image/webp" 
                             hidden
                         >
+                        
+                        <!-- Kamera inputu (mobil için) -->
+                        <input 
+                            type="file" 
+                            id="cameraInput" 
+                            accept="image/*" 
+                            capture="environment"
+                            hidden
+                        >
+                        
                         <p class="upload-hint">Desteklenen formatlar: JPEG, PNG, WEBP (Maks. 10 MB)</p>
                     </div>
                 </div>

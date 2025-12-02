@@ -12,6 +12,7 @@
 // Sayfa yüklendiğinde tüm HTML elementlerini seçiyoruz
 const uploadArea = document.getElementById('uploadArea');
 const fileInput = document.getElementById('fileInput');
+const cameraInput = document.getElementById('cameraInput'); // Kamera inputu
 const previewArea = document.getElementById('previewArea');
 const previewImage = document.getElementById('previewImage');
 const removeBtn = document.getElementById('removeBtn');
@@ -86,6 +87,7 @@ function handleFileSelect(file) {
 function removeFile() {
     selectedFile = null;
     fileInput.value = '';
+    cameraInput.value = ''; // Kamera inputunu da temizle
     previewImage.src = '';
     previewArea.classList.remove('active');
     uploadArea.style.display = 'block';
@@ -139,6 +141,13 @@ uploadArea.addEventListener('click', function() {
 
 // Dosya seçme inputu değiştiğinde
 fileInput.addEventListener('change', function(e) {
+    if (e.target.files.length > 0) {
+        handleFileSelect(e.target.files[0]);
+    }
+});
+
+// Kamera inputu değiştiğinde (mobil için)
+cameraInput.addEventListener('change', function(e) {
     if (e.target.files.length > 0) {
         handleFileSelect(e.target.files[0]);
     }
