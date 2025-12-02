@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Mütercim - Osmanlıca Metin Çevirici | TÜBİTAK Projesi">
+    <meta name="author" content="Mütercim Takımı">
+    
+    <title>Mütercim - Osmanlıca Çeviri</title>
+    
+    <!-- Favicon - Logo eklenince güncellenecek -->
+    <link rel="icon" type="image/png" href="logo.png">
+    
+    <!-- Google Fonts - Akademik ve okunabilir fontlar -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Ana stil dosyası -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- =====================================================
+         HEADER - Üst Başlık Alanı
+         ===================================================== -->
+    <header class="header">
+        <div class="header-content">
+            <!-- Logo alanı - logo.png eklenince görünecek -->
+            <div class="logo-area">
+                <img src="logo.png" alt="Mütercim Logo" class="logo" onerror="this.style.display='none'">
+                <div class="brand">
+                    <h1 class="brand-name">Mütercim</h1>
+                    <span class="brand-tagline">Osmanlıca Metin Çevirici</span>
+                </div>
+            </div>
+            
+            <!-- TÜBİTAK rozeti -->
+            <div class="tubitak-badge">
+                <span class="badge-icon">🎓</span>
+                <span class="badge-text">TÜBİTAK Projesi</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- =====================================================
+         MAIN - Ana İçerik Alanı
+         ===================================================== -->
+    <main class="main-container">
+        <!-- Giriş açıklaması -->
+        <section class="intro-section">
+            <p class="intro-text">
+                Osmanlıca (Arap harfli Türkçe) metinlerinizi yapay zeka destekli sistemimiz ile 
+                <strong>Latin harflerine</strong> çevirin ve <strong>günümüz Türkçesine</strong> tercüme edin.
+            </p>
+        </section>
+
+        <!-- Ana uygulama alanı -->
+        <div class="app-container">
+            <!-- Sol Panel - Resim Yükleme -->
+            <section class="upload-section">
+                <h2 class="section-title">
+                    <span class="title-icon">📷</span>
+                    Görsel Yükle
+                </h2>
+                
+                <!-- Sürükle-bırak alanı -->
+                <div class="upload-area" id="uploadArea">
+                    <div class="upload-content">
+                        <div class="upload-icon">📄</div>
+                        <p class="upload-text">Osmanlıca metin görselini sürükleyip bırakın</p>
+                        <p class="upload-subtext">veya</p>
+                        <label for="fileInput" class="upload-btn">
+                            Dosya Seç
+                        </label>
+                        <input 
+                            type="file" 
+                            id="fileInput" 
+                            accept="image/jpeg,image/jpg,image/png,image/webp" 
+                            hidden
+                        >
+                        <p class="upload-hint">Desteklenen formatlar: JPEG, PNG, WEBP (Maks. 10 MB)</p>
+                    </div>
+                </div>
+
+                <!-- Önizleme alanı -->
+                <div class="preview-area" id="previewArea">
+                    <div class="preview-header">
+                        <span>Yüklenen Görsel</span>
+                        <button class="remove-btn" id="removeBtn" title="Görseli Kaldır">✕</button>
+                    </div>
+                    <div class="preview-image-container">
+                        <img id="previewImage" src="" alt="Önizleme">
+                    </div>
+                </div>
+
+                <!-- Çevir butonu -->
+                <button class="translate-btn" id="translateBtn" disabled>
+                    <span class="btn-icon">🔄</span>
+                    <span class="btn-text">Çevir</span>
+                </button>
+            </section>
+
+            <!-- Sağ Panel - Sonuçlar -->
+            <section class="results-section">
+                <h2 class="section-title">
+                    <span class="title-icon">📜</span>
+                    Çeviri Sonuçları
+                </h2>
+
+                <!-- Boş durum mesajı -->
+                <div class="empty-state" id="emptyState">
+                    <div class="empty-icon">🏛️</div>
+                    <p class="empty-text">Çeviri sonuçları burada görünecek</p>
+                    <p class="empty-hint">Bir görsel yükleyip "Çevir" butonuna basın</p>
+                </div>
+
+                <!-- Yükleniyor animasyonu -->
+                <div class="loading-state" id="loadingState">
+                    <div class="spinner"></div>
+                    <p class="loading-text">Metin analiz ediliyor...</p>
+                    <p class="loading-hint">Bu işlem birkaç saniye sürebilir</p>
+                </div>
+
+                <!-- Sonuç kartları -->
+                <div class="results-cards" id="resultsCards">
+                    <!-- Transkripsiyon kartı -->
+                    <div class="result-card transcription-card">
+                        <div class="card-header">
+                            <div class="card-title">
+                                <span class="card-icon">✍️</span>
+                                Latin Harfli Okunuş
+                            </div>
+                            <button class="copy-btn" data-target="transcriptionText" title="Kopyala">
+                                📋
+                            </button>
+                        </div>
+                        <div class="card-content">
+                            <p id="transcriptionText" class="result-text transcription-text"></p>
+                        </div>
+                    </div>
+
+                    <!-- Çeviri kartı -->
+                    <div class="result-card translation-card">
+                        <div class="card-header">
+                            <div class="card-title">
+                                <span class="card-icon">📖</span>
+                                Günümüz Türkçesi
+                            </div>
+                            <button class="copy-btn" data-target="translationText" title="Kopyala">
+                                📋
+                            </button>
+                        </div>
+                        <div class="card-content">
+                            <p id="translationText" class="result-text translation-text"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hata mesajı -->
+                <div class="error-state" id="errorState">
+                    <div class="error-icon">⚠️</div>
+                    <p class="error-text" id="errorText">Bir hata oluştu</p>
+                    <button class="retry-btn" id="retryBtn">Tekrar Dene</button>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- =====================================================
+         FOOTER - Alt Bilgi Alanı
+         ===================================================== -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p class="footer-text">
+                © 2025 <strong>Mütercim</strong> - TÜBİTAK Öğrenci Projesi
+            </p>
+            <p class="footer-credits">
+                Yapay Zeka Destekli Osmanlıca Metin Çevirici
+            </p>
+        </div>
+    </footer>
+
+    <!-- Toast bildirim alanı -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- JavaScript dosyası -->
+    <script src="script.js"></script>
+</body>
+</html>
+

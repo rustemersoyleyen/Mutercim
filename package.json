@@ -1,0 +1,27 @@
+{
+  "name": "mutercim",
+  "version": "1.0.0",
+  "description": "TÜBİTAK Projesi - Osmanlıca Metin Çevirici (Gemini AI Destekli)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "keywords": [
+    "osmanlica",
+    "ceviri",
+    "tubitak",
+    "gemini",
+    "ai",
+    "translation"
+  ],
+  "author": "Mütercim Takımı",
+  "license": "MIT",
+  "dependencies": {
+    "@google/generative-ai": "^0.21.0",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "multer": "^1.4.5-lts.1"
+  }
+}
+

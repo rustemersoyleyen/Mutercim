@@ -1,0 +1,42 @@
+# =====================================================
+# MÜTERCİM - GIT IGNORE DOSYASI
+# =====================================================
+# Bu dosyada listelenen dosya/klasörler GitHub'a yüklenmez.
+# =====================================================
+
+# Bağımlılık klasörü (npm paketleri)
+node_modules/
+
+# Ortam değişkenleri dosyası (API anahtarları burada!)
+.env
+
+# Log dosyaları
+logs/
+*.log
+npm-debug.log*
+
+# Yüklenen dosyalar (eğer disk'e kaydedilirse)
+uploads/
+
+# İşletim sistemi dosyaları
+.DS_Store
+Thumbs.db
+
+# IDE/Editor ayarları
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Geçici dosyalar
+tmp/
+temp/
+*.tmp
+
+# Build çıktıları
+dist/
+build/
+
+# Test dosyaları
+coverage/
+
