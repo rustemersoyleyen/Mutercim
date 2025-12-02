@@ -47,12 +47,42 @@ let selectedFile = null;
  */
 function handleFileSelect(file) {
     // Dosya geçerli mi kontrol ediyoruz
-    if (!file) return;
+    if (!file) {
+        console.log('⚠️ Dosya seçilmedi');
+        return;
+    }
     
-    // Dosya türü kontrolü
-    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
-    if (!allowedTypes.includes(file.type)) {
+    console.log('📷 Dosya bilgisi:', {
+        name: file.name,
+        type: file.type,
+        size: file.size
+    });
+    
+    // Dosya türü kontrolü - mobil uyumlu
+    // Bazı mobil cihazlar farklı MIME tipi gönderebilir
+    const allowedTypes = [
+        'image/jpeg', 
+        'image/jpg', 
+        'image/png', 
+        'image/webp',
+        'image/heic',  // iPhone
+        'image/heif'   // iPhone
+    ];
+    
+    // Dosya uzantısını da kontrol et (bazı cihazlar MIME type göndermez)
+    const fileName = file.name.toLowerCase();
+    const allowedExtensions = ['.jpg', '.jpeg', '.png', '.webp', '.heic', '.heif'];
+    const hasValidExtension = allowedExtensions.some(ext => fileName.endsWith(ext));
+    
+    // MIME type boşsa veya bilinmiyorsa uzantıya bak
+    const isValidType = allowedTypes.includes(file.type) || 
+                        file.type.startsWith('image/') || 
+                        hasValidExtension ||
+                        file.type === ''; // Bazı mobil cihazlar boş gönderir
+    
+    if (!isValidType) {
         showToast('Sadece resim dosyaları yüklenebilir (JPEG, PNG, WEBP)', 'error');
+        console.log('❌ Geçersiz dosya türü:', file.type);
         return;
     }
     
@@ -68,12 +98,21 @@ function handleFileSelect(file) {
     
     // Önizleme gösteriyoruz
     const reader = new FileReader();
+    
     reader.onload = function(e) {
+        console.log('✅ Dosya okundu, önizleme gösteriliyor');
         previewImage.src = e.target.result;
         previewArea.classList.add('active');
         uploadArea.style.display = 'none';
         translateBtn.disabled = false;
+        showToast('Görsel yüklendi!', 'success');
     };
+    
+    reader.onerror = function(e) {
+        console.error('❌ Dosya okuma hatası:', e);
+        showToast('Dosya okunamadı, lütfen tekrar deneyin', 'error');
+    };
+    
     reader.readAsDataURL(file);
     
     // Sonuç alanını temizliyoruz

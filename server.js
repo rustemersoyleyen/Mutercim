@@ -26,12 +26,28 @@ const storage = multer.memoryStorage();
 
 // Sadece resim dosyalarını kabul ediyoruz
 const fileFilter = (req, file, cb) => {
-    // İzin verilen dosya türleri
-    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+    // İzin verilen dosya türleri - mobil uyumlu
+    const allowedTypes = [
+        'image/jpeg', 
+        'image/jpg', 
+        'image/png', 
+        'image/webp',
+        'image/heic',  // iPhone
+        'image/heif'   // iPhone
+    ];
     
-    if (allowedTypes.includes(file.mimetype)) {
+    // Dosya uzantısını kontrol et
+    const fileName = file.originalname.toLowerCase();
+    const allowedExtensions = ['.jpg', '.jpeg', '.png', '.webp', '.heic', '.heif'];
+    const hasValidExtension = allowedExtensions.some(ext => fileName.endsWith(ext));
+    
+    // MIME type veya uzantı geçerliyse kabul et
+    if (allowedTypes.includes(file.mimetype) || 
+        file.mimetype.startsWith('image/') || 
+        hasValidExtension) {
         cb(null, true);  // Dosya kabul edildi
     } else {
+        console.log('❌ Reddedilen dosya türü:', file.mimetype, file.originalname);
         cb(new Error('Sadece resim dosyaları yüklenebilir (JPEG, PNG, WEBP)'), false);
     }
 };
