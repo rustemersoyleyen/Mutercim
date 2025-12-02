@@ -13,6 +13,7 @@
 const uploadArea = document.getElementById('uploadArea');
 const fileInput = document.getElementById('fileInput');
 const cameraInput = document.getElementById('cameraInput'); // Kamera inputu
+const galleryInput = document.getElementById('galleryInput'); // Galeri inputu
 const previewArea = document.getElementById('previewArea');
 const previewImage = document.getElementById('previewImage');
 const removeBtn = document.getElementById('removeBtn');
@@ -128,6 +129,7 @@ function removeFile() {
     selectedFile = null;
     fileInput.value = '';
     cameraInput.value = ''; // Kamera inputunu da temizle
+    if (galleryInput) galleryInput.value = ''; // Galeri inputunu da temizle
     previewImage.src = '';
     previewArea.classList.remove('active');
     uploadArea.style.display = 'block';
@@ -212,6 +214,23 @@ cameraInput.addEventListener('input', function(e) {
     }
 });
 
+// Galeri inputu değiştiğinde (mobil için)
+if (galleryInput) {
+    galleryInput.addEventListener('change', function(e) {
+        console.log('🖼️ Galeri input change eventi tetiklendi');
+        if (e.target.files && e.target.files.length > 0) {
+            handleFileSelect(e.target.files[0]);
+        }
+    });
+    
+    galleryInput.addEventListener('input', function(e) {
+        console.log('🖼️ Galeri input eventi tetiklendi (input)');
+        if (e.target.files && e.target.files.length > 0) {
+            handleFileSelect(e.target.files[0]);
+        }
+    });
+}
+
 // Kaldır butonuna tıklama
 removeBtn.addEventListener('click', removeFile);
 
@@ -219,18 +238,30 @@ removeBtn.addEventListener('click', removeFile);
 // MOBİL KAMERA YARDIMCI FONKSİYONLARI
 // =====================================================
 
-// Kamera butonuna tıklandığında input'u resetle
-document.querySelector('.camera-btn').addEventListener('click', function(e) {
-    // Önce input'u temizle - bu iOS'ta önemli
-    cameraInput.value = '';
-    console.log('📷 Kamera butonu tıklandı, input temizlendi');
-});
-
-// Dosya seç butonuna tıklandığında input'u resetle  
-document.querySelector('.upload-btn:not(.camera-btn)').addEventListener('click', function(e) {
+// Tüm input'ları temizleme fonksiyonu
+function clearAllInputs() {
     fileInput.value = '';
-    console.log('📁 Dosya seç butonu tıklandı, input temizlendi');
-});
+    cameraInput.value = '';
+    if (galleryInput) galleryInput.value = '';
+}
+
+// Kamera butonuna tıklandığında
+const cameraBtnElement = document.querySelector('.camera-btn');
+if (cameraBtnElement) {
+    cameraBtnElement.addEventListener('click', function(e) {
+        clearAllInputs();
+        console.log('📷 Kamera butonu tıklandı');
+    });
+}
+
+// Dosya seç butonuna tıklandığında  
+const desktopBtnElement = document.querySelector('.desktop-only');
+if (desktopBtnElement) {
+    desktopBtnElement.addEventListener('click', function(e) {
+        clearAllInputs();
+        console.log('📁 Dosya seç butonu tıklandı');
+    });
+}
 
 // =====================================================
 // API İLETİŞİMİ

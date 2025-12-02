@@ -72,27 +72,42 @@
                         
                         <!-- Buton grubu - Dosya seç ve Kamera -->
                         <div class="upload-buttons">
-                            <label for="fileInput" class="upload-btn">
+                            <!-- Masaüstü için: Dosya Seç -->
+                            <label for="fileInput" class="upload-btn desktop-only">
                                 📁 Dosya Seç
                             </label>
-                            <label for="cameraInput" class="upload-btn camera-btn">
-                                📷 Kamera
+                            
+                            <!-- Mobil için: Kamera ile Çek -->
+                            <label for="cameraInput" class="upload-btn camera-btn mobile-only">
+                                📷 Kamera ile Çek
+                            </label>
+                            
+                            <!-- Mobil için: Galeriden Seç -->
+                            <label for="galleryInput" class="upload-btn mobile-only">
+                                🖼️ Galeriden Seç
                             </label>
                         </div>
                         
-                        <!-- Dosya seçme inputu -->
+                        <!-- Dosya seçme inputu (masaüstü) -->
                         <input 
                             type="file" 
                             id="fileInput" 
                             accept="image/*"
                         >
                         
-                        <!-- Kamera inputu (mobil için) -->
+                        <!-- Kamera inputu (mobil - fotoğraf çek) -->
                         <input 
                             type="file" 
                             id="cameraInput" 
                             accept="image/*"
                             capture="environment"
+                        >
+                        
+                        <!-- Galeri inputu (mobil - galeriden seç) -->
+                        <input 
+                            type="file" 
+                            id="galleryInput" 
+                            accept="image/*"
                         >
                         
                         <p class="upload-hint">Desteklenen formatlar: JPEG, PNG, WEBP (Maks. 10 MB)</p>

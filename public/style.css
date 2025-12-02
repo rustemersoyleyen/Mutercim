@@ -306,7 +306,8 @@ body {
 /* Dosya input'larını gizle - hidden attribute yerine CSS kullanıyoruz */
 /* Bu mobil uyumluluk için daha iyi çalışıyor */
 #fileInput,
-#cameraInput {
+#cameraInput,
+#galleryInput {
     position: absolute;
     width: 1px;
     height: 1px;
@@ -316,6 +317,38 @@ body {
     clip: rect(0, 0, 0, 0);
     white-space: nowrap;
     border: 0;
+}
+
+/* Masaüstü/Mobil görünürlük */
+.mobile-only {
+    display: none;
+}
+
+.desktop-only {
+    display: inline-flex;
+}
+
+/* Mobil cihazlarda (768px ve altı) */
+@media (max-width: 768px) {
+    .mobile-only {
+        display: inline-flex;
+    }
+    
+    .desktop-only {
+        display: none;
+    }
+    
+    .upload-buttons {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+    
+    .upload-btn {
+        width: 100%;
+        justify-content: center;
+        padding: 1rem 1.5rem;
+        font-size: 1.1rem;
+    }
 }
 
 /* Önizleme Alanı */
