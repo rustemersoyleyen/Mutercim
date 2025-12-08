@@ -10,29 +10,29 @@
    CSS DEĞİŞKENLERİ (Renk Paleti ve Genel Ayarlar)
    ===================================================== */
 :root {
-    /* Ana Renkler - Akademik Mavi Tonları */
-    --color-primary: #1a4b7c;          /* Koyu lacivert - ana renk */
-    --color-primary-light: #2563a8;    /* Açık mavi */
-    --color-primary-dark: #0f3155;     /* Daha koyu lacivert */
-    --color-accent: #c9a227;           /* Altın sarısı - vurgu rengi (Osmanlı estetiği) */
-    --color-accent-light: #e8c547;     /* Açık altın */
+    /* Ana Renkler - Klasik Osmanlı Krem Tonları */
+    --color-primary: #5c5c4a;          /* Koyu zeytin - ana renk */
+    --color-primary-light: #7a7a65;    /* Açık zeytin */
+    --color-primary-dark: #3d3d32;     /* Daha koyu zeytin */
+    --color-accent: #8b7355;           /* Kahverengi - vurgu rengi */
+    --color-accent-light: #a68b6a;     /* Açık kahve */
     
     /* Arka Plan Renkleri */
-    --bg-primary: #f8f9fc;             /* Ana arka plan - hafif gri-mavi */
-    --bg-secondary: #ffffff;           /* Kartlar için beyaz */
-    --bg-tertiary: #eef2f7;            /* İkincil arka plan */
-    --bg-dark: #1a2332;                /* Koyu arka plan (footer vb.) */
+    --bg-primary: #dcdcc3;             /* Ana arka plan - krem */
+    --bg-secondary: #f5f5e8;           /* Kartlar için açık krem */
+    --bg-tertiary: #e8e8d5;            /* İkincil arka plan */
+    --bg-dark: #3d3d32;                /* Koyu arka plan (footer vb.) */
     
     /* Metin Renkleri */
-    --text-primary: #1f2937;           /* Ana metin - koyu gri */
-    --text-secondary: #4b5563;         /* İkincil metin */
-    --text-muted: #6b7280;             /* Soluk metin */
-    --text-light: #ffffff;             /* Açık metin (koyu arka plan için) */
+    --text-primary: #2d2d24;           /* Ana metin - koyu kahve */
+    --text-secondary: #4a4a3d;         /* İkincil metin */
+    --text-muted: #6b6b5a;             /* Soluk metin */
+    --text-light: #f5f5e8;             /* Açık metin (koyu arka plan için) */
     
     /* Durum Renkleri */
-    --color-success: #059669;          /* Başarı - yeşil */
-    --color-error: #dc2626;            /* Hata - kırmızı */
-    --color-warning: #d97706;          /* Uyarı - turuncu */
+    --color-success: #5a7a5a;          /* Başarı - koyu yeşil */
+    --color-error: #8b4444;            /* Hata - koyu kırmızı */
+    --color-warning: #8b6b3d;          /* Uyarı - koyu turuncu */
     
     /* Gölgeler */
     --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
@@ -140,21 +140,7 @@ body {
     font-weight: 400;
 }
 
-.tubitak-badge {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    background: rgba(255, 255, 255, 0.15);
-    padding: 0.5rem 1rem;
-    border-radius: var(--radius-md);
-    font-size: 0.85rem;
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.badge-icon {
-    font-size: 1.1rem;
-}
+/* TÜBİTAK rozeti kaldırıldı */
 
 /* =====================================================
    MAIN - ANA İÇERİK

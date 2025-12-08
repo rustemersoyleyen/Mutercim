@@ -148,7 +148,7 @@ app.post('/upload', upload.single('image'), async (req, res) => {
         // Modele ne yapması gerektiğini açık ve net bir şekilde söylüyoruz
         const prompt = `Sen uzman bir Osmanlı tarihçisi ve dil bilimcisin. 
         
-Bu resimdeki Osmanlıca (Arap harfli Türkçe) metni dikkatli bir şekilde analiz et.
+Bu resimdeki Osmanlı Türkçesi metni dikkatli bir şekilde analiz et.
 
 ÖNEMLİ KURALLAR:
 1. Metni satır satır oku, hiçbir kelimeyi atlama
@@ -165,7 +165,7 @@ Cevabını SADECE aşağıdaki JSON formatında ver, başka hiçbir açıklama e
     "english": "English translation of the text goes here"
 }
 
-Eğer metin okunamıyorsa veya Osmanlıca değilse:
+Eğer metin okunamıyorsa veya Osmanlı Türkçesi değilse:
 {
     "transcription": "",
     "translation": "",
@@ -286,15 +286,14 @@ app.use((error, req, res, next) => {
 if (process.env.VERCEL !== '1') {
     app.listen(PORT, () => {
         console.log('');
-        console.log('╔═══════════════════════════════════════════════════╗');
-        console.log('║                                                   ║');
-        console.log('║   🏛️  MÜTERCİM - Osmanlıca Çeviri Uygulaması      ║');
-        console.log('║       TÜBİTAK Öğrenci Projesi                     ║');
-        console.log('║                                                   ║');
-        console.log('╠═══════════════════════════════════════════════════╣');
-        console.log(`║   🌐 Sunucu çalışıyor: http://localhost:${PORT}       ║`);
-        console.log('║   📝 Çıkmak için: Ctrl + C                        ║');
-        console.log('╚═══════════════════════════════════════════════════╝');
+console.log('╔═══════════════════════════════════════════════════════╗');
+    console.log('║                                                       ║');
+    console.log('║   🏛️  MÜTERCİM - Osmanlı Türkçesi Çeviri Uygulaması   ║');
+    console.log('║                                                       ║');
+    console.log('╠═══════════════════════════════════════════════════════╣');
+    console.log(`║   🌐 Sunucu çalışıyor: http://localhost:${PORT}           ║`);
+    console.log('║   📝 Çıkmak için: Ctrl + C                            ║');
+    console.log('╚═══════════════════════════════════════════════════════╝');
         console.log('');
     });
 }

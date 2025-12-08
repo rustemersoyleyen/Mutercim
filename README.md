@@ -1,21 +1,21 @@
-# 🏛️ Mütercim - Osmanlıca Metin Çevirici
+# 🏛️ Mütercim - Osmanlı Türkçesi Metin Çevirici
 
 <p align="center">
-  <img src="public/logo.png" alt="Mütercim Logo" width="150">
+  <img src="public/logo.jpg" alt="Mütercim Logo" width="150">
 </p>
 
 <p align="center">
-  <strong>TÜBİTAK Öğrenci Projesi</strong><br>
-  Yapay Zeka Destekli Osmanlıca Metin Çevirici
+  Yapay Zeka Destekli Osmanlı Türkçesi Metin Çevirici
 </p>
 
 ---
 
 ## 📝 Proje Hakkında
 
-**Mütercim**, Osmanlıca (Arap harfli Türkçe) metinlerin fotoğraflarını:
+**Mütercim**, Osmanlı Türkçesi metinlerin fotoğraflarını:
 - 📖 **Latin harflerine** çeviren (Transkripsiyon)
 - 🗣️ **Günümüz Türkçesine** tercüme eden
+- 🌍 **İngilizceye** çeviren
 
 yapay zeka destekli bir web uygulamasıdır.
 

@@ -435,6 +435,6 @@ document.addEventListener('keydown', function(e) {
 // =====================================================
 // SAYFA YÜKLENDİĞİNDE
 // =====================================================
-console.log('🏛️ Mütercim - Osmanlıca Çeviri Uygulaması yüklendi');
+console.log('🏛️ Mütercim - Osmanlı Türkçesi Çeviri Uygulaması yüklendi');
 console.log('💡 İpucu: Ctrl + Enter ile hızlı çeviri yapabilirsiniz');
 
