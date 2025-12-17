@@ -130,8 +130,8 @@ app.post('/upload', upload.single('image'), async (req, res) => {
         // GEMİNİ AI İLE İLETİŞİM
         // =====================================================
         
-        // Gemini 1.5 Flash modelini kullanıyoruz (daha yüksek free tier kota)
-        const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
+        // Gemini Pro Vision modelini kullanıyoruz (görsel analiz için optimize)
+        const model = genAI.getGenerativeModel({ model: 'gemini-pro-vision' });
 
         // Resmi base64 formatına çeviriyoruz
         // Gemini API, resimleri bu formatta bekliyor
