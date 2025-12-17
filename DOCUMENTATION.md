@@ -237,3 +237,4 @@ Uygulama **Vercel** platformunda barındırılmaktadır:
 
 *Bu dokümantasyon, projenin teknik detaylarını ve geliştirme sürecini açıklamak amacıyla hazırlanmıştır.*
 
+

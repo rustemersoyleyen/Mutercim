@@ -130,8 +130,8 @@ app.post('/upload', upload.single('image'), async (req, res) => {
         // GEMİNİ AI İLE İLETİŞİM
         // =====================================================
         
-        // Gemini-2.5-pro modelini kullanıyoruz (daha güçlü ve doğru)
-        const model = genAI.getGenerativeModel({ model: 'gemini-2.5-pro' });
+        // Gemini 2.5 Flash modelini kullanıyoruz
+        const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
 
         // Resmi base64 formatına çeviriyoruz
         // Gemini API, resimleri bu formatta bekliyor
@@ -141,6 +141,24 @@ app.post('/upload', upload.single('image'), async (req, res) => {
                 mimeType: req.file.mimetype
             }
         };
+        
+        // Retry fonksiyonu - rate limit durumunda bekleyip tekrar dene
+        async function tryWithRetry(fn, maxRetries = 3) {
+            for (let i = 0; i < maxRetries; i++) {
+                try {
+                    return await fn();
+                } catch (error) {
+                    if (error.status === 429 && i < maxRetries - 1) {
+                        // Rate limit - bekle ve tekrar dene
+                        const waitTime = (i + 1) * 5000; // 5s, 10s, 15s
+                        console.log(`⏳ Rate limit, ${waitTime/1000}s bekleniyor... (Deneme ${i + 2}/${maxRetries})`);
+                        await new Promise(resolve => setTimeout(resolve, waitTime));
+                    } else {
+                        throw error;
+                    }
+                }
+            }
+        }
 
         // =====================================================
         // PROMPT MÜHENDİSLİĞİ
@@ -175,8 +193,10 @@ Eğer metin okunamıyorsa veya Osmanlı Türkçesi değilse:
 
         console.log('🤖 Gemini AI\'ya istek gönderiliyor...');
 
-        // Gemini'ye resmi ve prompt'u gönderiyoruz
-        const result = await model.generateContent([prompt, imageData]);
+        // Gemini'ye resmi ve prompt'u gönderiyoruz (retry mekanizması ile)
+        const result = await tryWithRetry(async () => {
+            return await model.generateContent([prompt, imageData]);
+        });
         const response = await result.response;
         const text = response.text();
 
@@ -236,16 +256,23 @@ Eğer metin okunamıyorsa veya Osmanlı Türkçesi değilse:
     } catch (error) {
         // Hata durumunda kullanıcıya bilgi veriyoruz
         console.error('❌ Hata oluştu:', error.message);
+        console.error('❌ Hata detayı:', error);
         
         // Farklı hata türlerine göre mesaj belirliyoruz
         let errorMessage = 'Bir hata oluştu. Lütfen tekrar deneyin.';
+        const errMsg = error.message?.toLowerCase() || '';
         
-        if (error.message.includes('API key')) {
+        if (errMsg.includes('api key') || errMsg.includes('api_key') || errMsg.includes('invalid')) {
             errorMessage = 'API anahtarı geçersiz. Lütfen yöneticiyle iletişime geçin.';
-        } else if (error.message.includes('quota')) {
+        } else if (errMsg.includes('quota') || errMsg.includes('rate') || errMsg.includes('limit') || errMsg.includes('resource')) {
             errorMessage = 'API kotası aşıldı. Lütfen daha sonra tekrar deneyin.';
-        } else if (error.message.includes('SAFETY')) {
+        } else if (errMsg.includes('safety') || errMsg.includes('block')) {
             errorMessage = 'Resim güvenlik filtresine takıldı. Lütfen farklı bir resim deneyin.';
+        } else if (errMsg.includes('not found') || errMsg.includes('404')) {
+            errorMessage = 'Model bulunamadı. Lütfen yöneticiyle iletişime geçin.';
+        } else {
+            // Gerçek hatayı göster (debug için)
+            errorMessage = 'Hata: ' + error.message;
         }
         
         res.status(500).json({
